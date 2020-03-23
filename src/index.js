@@ -17,6 +17,8 @@ class App extends Component {
   }
 
   componentDidMount() {
+    const textarea = this.codeRef.current;
+    textarea.value = localStorage.getItem("code");
     setInterval(() => this.setState({time: this.state.time+1}), 200);
   }
 
@@ -29,8 +31,9 @@ class App extends Component {
         this.state.time,
         (x, y, color) => pixels.push({x, y, color}),
         msg => messages.push(JSON.stringify(msg)));
+      localStorage.setItem("code", this.codeRef.current.value);
     } catch(ex) {
-      return messages.push(ex.toString());
+      messages.push(ex.toString());
     }
     return {pixels, messages};
   }
