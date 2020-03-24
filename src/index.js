@@ -1,19 +1,17 @@
 import { h, render, Component, createRef } from "preact";
 
-// TODO:
-// - save code to localStorage
-//
-
 class App extends Component {
   constructor() {
     super();
     this.setState({
       gridSize: localStorage.getItem("gridSize") || 30,
+      animationSpeed: localStorage.getItem("animationSpeed") || 1,
       time: 0
     });
     this.codeRef = createRef();
     this.onClick = this.onClick.bind(this);
     this.onGridSize = this.onGridSize.bind(this);
+    this.onAnimationSpeed = this.onAnimationSpeed.bind(this);
     this.onCode = this.onCode.bind(this);
     this.eval = this.eval.bind(this);
   }
@@ -21,7 +19,12 @@ class App extends Component {
   componentDidMount() {
     const textarea = this.codeRef.current;
     textarea.value = localStorage.getItem("code");
-    setInterval(() => this.setState({time: this.state.time+1}), 200);
+
+    const loop = () => {
+        this.setState({time: this.state.time+1});
+        setTimeout(loop, 1000 / this.state.animationSpeed);
+    }
+    loop();
   }
 
   eval(code) {
@@ -33,13 +36,13 @@ class App extends Component {
         this.state.time,
         (x, y, color) => pixels.push({x, y, color}),
         msg => messages.push(JSON.stringify(msg)));
-      localStorage.setItem("code", this.codeRef.current.value);
+      if(this.codeRef.current)
+        localStorage.setItem("code", this.codeRef.current.value);
     } catch(ex) {
       messages.push(ex.toString());
     }
     return {pixels, messages};
   }
-
 
   onClick(e) {
     if (!e.target.classList.contains("pixel")) {
@@ -49,6 +52,12 @@ class App extends Component {
       this.codeRef.current.value += `\npixel(${x}, ${y});`;
       this.forceUpdate();
     }
+  }
+
+  onAnimationSpeed(e) {
+    const animationSpeed = e.target.value;
+    localStorage.setItem("animationSpeed", animationSpeed);
+    this.setState({animationSpeed});
   }
 
   onGridSize(e) {
@@ -98,8 +107,11 @@ class App extends Component {
             <input type="range" min="8" max="60" value={grid} onChange={this.onGridSize}/>
           </div>
           <div class="speed">
-            <div>Скорость анимации: {123}</div>
-            <input type="range" min="8" max="60" value={null} onChange={null}/>
+            <div>Скорость анимации: {this.state.animationSpeed}</div>
+            <input
+              type="range" min="1" max="20"
+              value={this.state.animationSpeed}
+              onChange={this.onAnimationSpeed}/>
           </div>
           <textarea class="code" onKeyUp={this.onCode} ref={this.codeRef}/>
           <textarea class="log" readonly="true" value={log}/>
