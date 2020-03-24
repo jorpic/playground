@@ -89,18 +89,22 @@ class App extends Component {
           {rect(grid*5, 1)}
         </pattern>
       </defs>;
+
     return (
-      <div class="columns">
-        <div class="left">
-          <div class="env">
+      <div class="container">
+        <div class="controls">
+          <div class="size">
             <div>Размер клеток: {grid}</div>
             <input type="range" min="8" max="60" value={grid} onChange={this.onGridSize}/>
           </div>
-          <textarea class="code" onKeyUp={this.onCode} ref={this.codeRef}>
-          </textarea>
-          <textarea class="log" readonly="true" value={log}></textarea>
+          <div class="speed">
+            <div>Скорость анимации: {123}</div>
+            <input type="range" min="8" max="60" value={null} onChange={null}/>
+          </div>
+          <textarea class="code" onKeyUp={this.onCode} ref={this.codeRef}/>
+          <textarea class="log" readonly="true" value={log}/>
         </div>
-        <div class="right">
+        <div class="gird">
           <svg width="100%" height="100%" onClick={this.onClick}>
             {gridPattern}
             <rect width="100%" height="100%" fill="url(#grid)" />

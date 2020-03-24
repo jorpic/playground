@@ -5,35 +5,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
       textarea {
         font-size: 2vh;
         font-family: monospace;
       }
-      .columns .left {
-        display: inline-block;
-        height: 95vh;
+      .container {
+        display: flex;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
         width: 40vw;
-      }
-      .columns .right {
-        display: inline-block;
         height: 95vh;
-        width: 50vw;
-      }
-      svg {
-        display: block;
-      }
-      .env, .code, .log {
-        display: block;
-        width: 100%;
-      }
-      .env {
-        height: 10vh;
+        margin: 1vh;
       }
       .code {
         height: 45vh;
       }
       .log {
-        height: 40vh;
+        height: 30vh;
       }
     </style>
   </head>
