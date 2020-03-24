@@ -67,7 +67,7 @@ class App extends Component {
   }
 
   onCode(e) {
-    this.forceUpdate();
+    this.setState({time: 0});
   }
 
   render() {
