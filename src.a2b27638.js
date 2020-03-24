@@ -520,11 +520,13 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
 
     _this.setState({
-      codeChanged: true,
+      gridSize: localStorage.getItem("gridSize") || 30,
       time: 0
     });
 
     _this.codeRef = (0, _preact.createRef)();
+    _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
+    _this.onGridSize = _this.onGridSize.bind(_assertThisInitialized(_this));
     _this.onCode = _this.onCode.bind(_assertThisInitialized(_this));
     _this.eval = _this.eval.bind(_assertThisInitialized(_this));
     return _this;
@@ -571,16 +573,34 @@ function (_Component) {
       };
     }
   }, {
+    key: "onClick",
+    value: function onClick(e) {
+      if (!e.target.classList.contains("pixel")) {
+        var rect = e.target.getBoundingClientRect();
+        var x = Math.floor((e.clientX - rect.left) / this.state.gridSize);
+        var y = Math.floor((e.clientY - rect.top) / this.state.gridSize);
+        this.codeRef.current.value += "\npixel(".concat(x, ", ").concat(y, ");");
+        this.forceUpdate();
+      }
+    }
+  }, {
+    key: "onGridSize",
+    value: function onGridSize(e) {
+      var gridSize = e.target.value;
+      localStorage.setItem("gridSize", gridSize);
+      this.setState({
+        gridSize: gridSize
+      });
+    }
+  }, {
     key: "onCode",
     value: function onCode(e) {
-      this.setState({
-        codeChanged: true
-      });
+      this.forceUpdate();
     }
   }, {
     key: "render",
     value: function render() {
-      var grid = 40;
+      var grid = this.state.gridSize;
       var textarea = this.codeRef.current;
       var code = textarea ? textarea.value : "";
       var res = this.eval(code);
@@ -590,20 +610,53 @@ function (_Component) {
             y = _ref.y,
             color = _ref.color;
         return (0, _preact.h)("rect", {
-          x: x * grid + 1,
-          y: y * grid + 1,
+          class: "pixel",
+          x: x * grid + 0.5,
+          y: y * grid + 0.5,
           width: grid - 1,
-          height: grid - 2,
+          height: grid - 1,
           fill: color || "skyblue"
         });
       });
+
+      var rect = function rect(size, width) {
+        return (0, _preact.h)("rect", {
+          width: size,
+          height: size,
+          fill: "none",
+          stroke: "lightgray",
+          "stroke-width": width
+        });
+      };
+
+      var gridPattern = (0, _preact.h)("defs", null, (0, _preact.h)("pattern", {
+        id: "smallGrid",
+        width: grid,
+        height: grid,
+        patternUnits: "userSpaceOnUse"
+      }, rect(grid, 0.5)), (0, _preact.h)("pattern", {
+        id: "grid",
+        width: grid * 5,
+        height: grid * 5,
+        patternUnits: "userSpaceOnUse"
+      }, (0, _preact.h)("rect", {
+        width: grid * 5,
+        height: grid * 5,
+        fill: "url(#smallGrid)"
+      }), rect(grid * 5, 1)));
       return (0, _preact.h)("div", {
         class: "columns"
       }, (0, _preact.h)("div", {
         class: "left"
       }, (0, _preact.h)("div", {
         class: "env"
-      }), (0, _preact.h)("textarea", {
+      }, (0, _preact.h)("div", null, "\u0420\u0430\u0437\u043C\u0435\u0440 \u043A\u043B\u0435\u0442\u043E\u043A: ", grid), (0, _preact.h)("input", {
+        type: "range",
+        min: "8",
+        max: "60",
+        value: grid,
+        onChange: this.onGridSize
+      })), (0, _preact.h)("textarea", {
         class: "code",
         onKeyUp: this.onCode,
         ref: this.codeRef
@@ -615,32 +668,9 @@ function (_Component) {
         class: "right"
       }, (0, _preact.h)("svg", {
         width: "100%",
-        height: "100%"
-      }, (0, _preact.h)("defs", null, (0, _preact.h)("pattern", {
-        id: "smallGrid",
-        width: "40",
-        height: "40",
-        patternUnits: "userSpaceOnUse"
-      }, (0, _preact.h)("path", {
-        d: "M 40 0 L 0 0 0 40",
-        fill: "none",
-        stroke: "lightgray",
-        "stroke-width": "0.5"
-      })), (0, _preact.h)("pattern", {
-        id: "grid",
-        width: "200",
-        height: "200",
-        patternUnits: "userSpaceOnUse"
-      }, (0, _preact.h)("rect", {
-        width: "200",
-        height: "200",
-        fill: "url(#smallGrid)"
-      }), (0, _preact.h)("path", {
-        d: "M 200 0 L 0 0 0 200",
-        fill: "none",
-        stroke: "lightgray",
-        "stroke-width": "1"
-      }))), (0, _preact.h)("rect", {
+        height: "100%",
+        onClick: this.onClick
+      }, gridPattern, (0, _preact.h)("rect", {
         width: "100%",
         height: "100%",
         fill: "url(#grid)"
@@ -680,7 +710,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41531" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37063" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
