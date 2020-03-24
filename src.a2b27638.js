@@ -521,12 +521,14 @@ function (_Component) {
 
     _this.setState({
       gridSize: localStorage.getItem("gridSize") || 30,
+      animationSpeed: localStorage.getItem("animationSpeed") || 1,
       time: 0
     });
 
     _this.codeRef = (0, _preact.createRef)();
     _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
     _this.onGridSize = _this.onGridSize.bind(_assertThisInitialized(_this));
+    _this.onAnimationSpeed = _this.onAnimationSpeed.bind(_assertThisInitialized(_this));
     _this.onCode = _this.onCode.bind(_assertThisInitialized(_this));
     _this.eval = _this.eval.bind(_assertThisInitialized(_this));
     return _this;
@@ -539,11 +541,16 @@ function (_Component) {
 
       var textarea = this.codeRef.current;
       textarea.value = localStorage.getItem("code");
-      setInterval(function () {
-        return _this2.setState({
+
+      var loop = function loop() {
+        _this2.setState({
           time: _this2.state.time + 1
         });
-      }, 200);
+
+        setTimeout(loop, 1000 / _this2.state.animationSpeed);
+      };
+
+      loop();
     }
   }, {
     key: "eval",
@@ -562,7 +569,7 @@ function (_Component) {
         }, function (msg) {
           return messages.push(JSON.stringify(msg));
         });
-        localStorage.setItem("code", this.codeRef.current.value);
+        if (this.codeRef.current) localStorage.setItem("code", this.codeRef.current.value);
       } catch (ex) {
         messages.push(ex.toString());
       }
@@ -582,6 +589,15 @@ function (_Component) {
         this.codeRef.current.value += "\npixel(".concat(x, ", ").concat(y, ");");
         this.forceUpdate();
       }
+    }
+  }, {
+    key: "onAnimationSpeed",
+    value: function onAnimationSpeed(e) {
+      var animationSpeed = e.target.value;
+      localStorage.setItem("animationSpeed", animationSpeed);
+      this.setState({
+        animationSpeed: animationSpeed
+      });
     }
   }, {
     key: "onGridSize",
@@ -645,17 +661,25 @@ function (_Component) {
         fill: "url(#smallGrid)"
       }), rect(grid * 5, 1)));
       return (0, _preact.h)("div", {
-        class: "columns"
+        class: "container"
       }, (0, _preact.h)("div", {
-        class: "left"
+        class: "controls"
       }, (0, _preact.h)("div", {
-        class: "env"
+        class: "size"
       }, (0, _preact.h)("div", null, "\u0420\u0430\u0437\u043C\u0435\u0440 \u043A\u043B\u0435\u0442\u043E\u043A: ", grid), (0, _preact.h)("input", {
         type: "range",
         min: "8",
         max: "60",
         value: grid,
         onChange: this.onGridSize
+      })), (0, _preact.h)("div", {
+        class: "speed"
+      }, (0, _preact.h)("div", null, "\u0421\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0430\u043D\u0438\u043C\u0430\u0446\u0438\u0438: ", this.state.animationSpeed), (0, _preact.h)("input", {
+        type: "range",
+        min: "1",
+        max: "20",
+        value: this.state.animationSpeed,
+        onChange: this.onAnimationSpeed
       })), (0, _preact.h)("textarea", {
         class: "code",
         onKeyUp: this.onCode,
@@ -665,7 +689,7 @@ function (_Component) {
         readonly: "true",
         value: log
       })), (0, _preact.h)("div", {
-        class: "right"
+        class: "gird"
       }, (0, _preact.h)("svg", {
         width: "100%",
         height: "100%",
@@ -710,7 +734,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37063" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44725" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
