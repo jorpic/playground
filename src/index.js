@@ -8,12 +8,12 @@ class App extends Component {
   constructor() {
     super();
     this.setState({
-      codeChanged: true,
       gridSize: localStorage.getItem("gridSize") || 30,
       time: 0
     });
     this.codeRef = createRef();
-    this.onGrid = this.onGrid.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onGridSize = this.onGridSize.bind(this);
     this.onCode = this.onCode.bind(this);
     this.eval = this.eval.bind(this);
   }
@@ -41,14 +41,24 @@ class App extends Component {
   }
 
 
-  onGrid(e) {
+  onClick(e) {
+    if (!e.target.classList.contains("pixel")) {
+      const rect = e.target.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) / this.state.gridSize);
+      const y = Math.floor((e.clientY - rect.top) / this.state.gridSize);
+      this.codeRef.current.value += `\npixel(${x}, ${y});`;
+      this.forceUpdate();
+    }
+  }
+
+  onGridSize(e) {
     const gridSize = e.target.value;
     localStorage.setItem("gridSize", gridSize);
     this.setState({gridSize});
   }
 
   onCode(e) {
-    this.setState({codeChanged: true});
+    this.forceUpdate();
   }
 
   render() {
@@ -60,6 +70,7 @@ class App extends Component {
     const log = res.messages.join("\n");
     const pixels = res.pixels.map(({x, y, color}) =>
       <rect
+        class="pixel"
         x={x*grid + 0.5}
         y={y*grid + 0.5}
         width={grid-1}
@@ -83,14 +94,14 @@ class App extends Component {
         <div class="left">
           <div class="env">
             <div>Размер клеток: {grid}</div>
-            <input type="range" min="8" max="60" value={grid} onChange={this.onGrid}/>
+            <input type="range" min="8" max="60" value={grid} onChange={this.onGridSize}/>
           </div>
           <textarea class="code" onKeyUp={this.onCode} ref={this.codeRef}>
           </textarea>
           <textarea class="log" readonly="true" value={log}></textarea>
         </div>
         <div class="right">
-          <svg width="100%" height="100%">
+          <svg width="100%" height="100%" onClick={this.onClick}>
             {gridPattern}
             <rect width="100%" height="100%" fill="url(#grid)" />
             {pixels}
