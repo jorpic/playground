@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/jorpic/playground#readme",
   "dependencies": {
-    "preact": "^10.3.4"
+    "preact": "^10.3.4",
+    "regenerator-runtime": "^0.13.5"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",

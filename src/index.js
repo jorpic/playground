@@ -1,5 +1,9 @@
 import { h, render, Component, createRef } from "preact";
 
+// This is required as parcel uses babel to translate
+// generator functions to ES5+.
+import regeneratorRuntime from "regenerator-runtime";
+
 class App extends Component {
   constructor() {
     super();
@@ -30,12 +34,25 @@ class App extends Component {
   eval(code) {
     const pixels = [];
     const messages = [];
+
+    function* range(a, b) {
+      if (a <= b) {
+        for(let i = a; i <= b; i++) {
+          yield i;
+        }
+      }
+    }
+
     try {
-      const run = Function("time", "pixel", "log", code);
+      const run = Function(
+        "time", "pixel", "log", "range",
+        code);
       run(
         this.state.time,
         (x, y, color) => pixels.push({x, y, color}),
-        msg => messages.push(JSON.stringify(msg)));
+        msg => messages.push(JSON.stringify(msg)),
+        range
+      );
       if(this.codeRef.current)
         localStorage.setItem("code", this.codeRef.current.value);
     } catch(ex) {
