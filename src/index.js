@@ -10,7 +10,8 @@ class App extends Component {
     this.setState({
       gridSize: localStorage.getItem("gridSize") || 30,
       animationSpeed: localStorage.getItem("animationSpeed") || 1,
-      time: 0
+      time: 0,
+      code: ""
     });
     this.codeRef = createRef();
     this.onClick = this.onClick.bind(this);
@@ -23,6 +24,7 @@ class App extends Component {
   componentDidMount() {
     const textarea = this.codeRef.current;
     textarea.value = localStorage.getItem("code");
+    this.setState({code: textarea.value});
 
     const loop = () => {
         this.setState({time: this.state.time+1});
@@ -84,7 +86,10 @@ class App extends Component {
   }
 
   onCode(e) {
-    this.setState({time: 0});
+    const textarea = this.codeRef.current;
+    if(this.state.code != textarea.value) {
+      this.setState({time: 0, code: textarea.value});
+    }
   }
 
   render() {
