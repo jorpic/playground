@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>.</title>
+    <title>Playground</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -13,25 +13,33 @@
         font-size: 2vh;
         font-family: monospace;
       }
-      .container {
-        display: flex;
-      }
-      .controls {
-        display: flex;
+      .my-controls {
         flex-direction: column;
-        width: 40vw;
-        height: 95vh;
-        margin: 1vh;
+        max-width: 35vw;
+        height: 100vh;
       }
-      .code {
-        height: 45vh;
+      .code-editor {
+        flex-direction: column;
       }
-      .log {
-        height: 30vh;
+      .code-editor > * {
+      }
+      .code-editor .message {
+        max-height: 20vh;
+      }
+      .resize-horizontal {
+        resize: horizontal;
+        overflow: auto;
+      }
+      .resize-vertical {
+        resize: vertical;
+        overflow: auto;
+      }
+      .is-grow {
+        flex: 1;
       }
     </style>
   </head>
   <body>
-    <script src="./src/index.js"></script>
+    <script src="./src/index.tsx"></script>
   </body>
 </html>
