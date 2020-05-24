@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/jorpic/playground#readme",
   "dependencies": {
+    "@codemirror/next": "^0.6.0",
     "bulma": "^0.8.2",
     "classnames": "^2.2.6",
+    "eslint4b": "^7.1.0",
     "preact": "^10.4.4"
   },
   "devDependencies": {
