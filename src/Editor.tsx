@@ -1,6 +1,6 @@
 import { h, Component, createRef } from "preact";
 import { EditorView } from "@codemirror/next/view";
-import { EditorState } from "@codemirror/next/state";
+import { EditorState, Transaction, ChangeSet } from "@codemirror/next/state";
 import { keymap } from "@codemirror/next/keymap";
 import { baseKeymap } from "@codemirror/next/commands";
 import { lineNumbers } from "@codemirror/next/gutter";
@@ -14,8 +14,17 @@ export default class Editor extends Component {
 
   divRef = createRef();
 
+  getText = () => this.editor.state.doc.toString()
+
+  setText = text => {
+    const st = this.editor.state;
+    const tx = st.update({
+      changes: {from: 0, to: st.doc.length, insert: text}
+    });
+    this.editor.update([tx]);
+  }
+
   componentDidMount() {
-    console.log({defaultHighlighter, lineNumbers});
     this.editor = new EditorView({
       state: EditorState.create({
         doc: this.props.code,
@@ -26,7 +35,13 @@ export default class Editor extends Component {
           defaultHighlighter,
           keymap(baseKeymap)
         ]
-      })
+      }),
+      dispatch: tx => {
+        if(tx.docChanged && this.props.onChange) {
+          this.props.onChange();
+        }
+        this.editor.update([tx]);
+      }
     });
 
     this.divRef.current.appendChild(this.editor.dom);
