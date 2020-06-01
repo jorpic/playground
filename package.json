@@ -22,10 +22,11 @@
     "bulma": "^0.8.2",
     "classnames": "^2.2.6",
     "eslint4b": "^7.1.0",
-    "preact": "^10.4.4"
+    "preact": "^10.4.4",
+    "unistore": "^3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
+    "@babel/core": "^7.10.2",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "gh-pages": "^2.2.0",

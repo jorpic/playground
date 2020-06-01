@@ -37,10 +37,10 @@ export default class Editor extends Component {
         ]
       }),
       dispatch: tx => {
+        this.editor.update([tx]);
         if(tx.docChanged && this.props.onChange) {
           this.props.onChange();
         }
-        this.editor.update([tx]);
       }
     });
 
