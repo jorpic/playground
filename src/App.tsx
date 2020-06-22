@@ -21,7 +21,7 @@ class App extends Component {
 
     return (
       <div class="columns is-gapless is-marginless">
-        <div class="my-controls is-flex resize-horizontal">
+        <div class="my-controls is-flex">
           <Navigation {{task, section}} />
           { section === "tasks" && <TaskList {task} /> }
           { section === "code"

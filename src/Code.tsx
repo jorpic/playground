@@ -27,18 +27,18 @@ export default class Code extends Component {
   render() {
     return (
       <div class="code-editor is-flex is-grow">
-        <article class="message is-info is-marginless">
+        <article class="info message is-info is-marginless">
           <div class="message-body">
             <h1>{this.props.task}</h1>
           </div>
         </article>
         <Editor
-          class="code resize-vertical"
+          class="code is-grow"
           onChange={this.codeChanged}
           ref={this.editorRef}
         />
         <textarea
-          class="message is-grow"
+          class="log message"
           readonly="true"
           value={this.props.stdout.join("\n")}/>
       </div>

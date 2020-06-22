@@ -11,35 +11,29 @@
       }
       .my-controls {
         flex-direction: column;
-        max-width: 35vw;
+        width: 25vw;
         height: 100vh;
-      }
-      .code-editor {
-        flex-direction: column;
-      }
-      .code-editor > * {
-      }
-      .code-editor .message {
-        max-height: 20vh;
-        font-family: monospace;
-      }
-      .resize-horizontal {
-        resize: horizontal;
-        overflow: auto;
-      }
-      .resize-vertical {
-        resize: vertical;
-        overflow: auto;
       }
       .is-grow {
         flex: 1;
       }
-
-      .cm-wrap {
-        height: 100px;
+      .code-editor {
+        flex-direction: column;
+      }
+      .code-editor .info {
+      }
+      .code-editor .code {
+        height: 50vh;
+      }
+      .code-editor .log {
+        height: 20vh;
+        font-family: monospace;
+      }
+      .code .cm-wrap {
+        height: 100%;
         background-color: white;
       }
-      .cm-scroller {
+      .code .cm-scroller {
         overflow: auto;
       }
     </style>
